@@ -1,0 +1,67 @@
+-- -----------------------------------------------------
+-- Creación de la BASE DE DATOS.
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS Biblioteca;
+USE Biblioteca;
+
+-- -----------------------------------------------------
+-- Creación de las TABLAS.
+-- -----------------------------------------------------
+
+-- --------Tabla AUTOR ---------
+-- Tabla que almacena la información de los autores.
+CREATE TABLE IF NOT EXISTS Autor(
+    ID_Autor INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- Identificador único para cada autor.
+    Nombre VARCHAR(255) NOT NULL,                      -- Nombre del autor.
+    Nacionalidad VARCHAR(255) NOT NULL)                -- Nacionalidad del autor.
+ENGINE = InnoDB;
+
+-- --------Tabla CATEGORÍA ---------
+-- Tabla que almacena las diferentes categorías de libros.
+CREATE TABLE IF NOT EXISTS Categoria(
+    ID_Categoria INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- Identificador único para cada categoría.
+    Nombre VARCHAR(255) NOT NULL)                          -- Nombre de la categoría.
+ENGINE = InnoDB;
+
+-- --------Tabla EDITORIAL ---------
+-- Tabla que almacena la información de las editoriales.
+CREATE TABLE IF NOT EXISTS Editorial(
+    ID_Editorial INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- Identificador único para cada editorial.
+    Nombre VARCHAR(255) NOT NULL,                          -- Nombre de la editorial.
+    Dirección VARCHAR(255) NOT NULL)                       -- Dirección de la editorial.
+ENGINE = InnoDB;
+
+-- --------Tabla LIBRO ---------
+-- Tabla que almacena la información de los libros.
+CREATE TABLE IF NOT EXISTS Libro(
+    ID_Libro INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- Identificador único para cada libro.
+    Titulo VARCHAR(255) NOT NULL,                      -- Título del libro.
+    Año_Publicación INT NOT NULL,                      -- Año de publicación del libro.
+    ID_Autor INT NOT NULL,                             -- Clave foránea que referencia al autor del libro.
+    ID_Categoria INT NOT NULL,                         -- Clave foránea que referencia a la categoría del libro.
+    ID_Editorial INT NOT NULL,                         -- Clave foránea que referencia a la editorial del libro.
+    FOREIGN KEY (ID_Autor) REFERENCES Autor(ID_Autor),         -- Relación con la tabla Autor.
+    FOREIGN KEY (ID_Categoria) REFERENCES Categoria(ID_Categoria),  -- Relación con la tabla Categoria.
+    FOREIGN KEY (ID_Editorial) REFERENCES Editorial(ID_Editorial))  -- Relación con la tabla Editorial.
+ENGINE = InnoDB;
+
+-- --------Tabla USUARIO ---------
+-- Tabla que almacena la información de los usuarios.
+CREATE TABLE IF NOT EXISTS Usuario(
+    ID_Usuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- Identificador único para cada usuario.
+    Nombre VARCHAR(255) NOT NULL,                        -- Nombre del usuario.
+    Dirección VARCHAR(255) NOT NULL,                     -- Dirección del usuario.
+    Teléfono VARCHAR(15) NOT NULL)                       -- Teléfono del usuario.
+ENGINE = InnoDB;
+
+-- --------Tabla PRÉSTAMO ---------
+-- Tabla que almacena la información de los préstamos de libros.
+CREATE TABLE IF NOT EXISTS Prestamo(
+    ID_Prestamo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,  -- Identificador único para cada préstamo.
+    Fecha_Prestamo DATE NOT NULL,                         -- Fecha en la que se realiza el préstamo.
+    Fecha_Devolucion DATE,                                -- Fecha en la que se devuelve el libro.
+    ID_Libro INT NOT NULL,                                -- Clave foránea que referencia al libro prestado.
+    ID_Usuario INT NOT NULL,                              -- Clave foránea que referencia al usuario que realiza el préstamo.
+    FOREIGN KEY (ID_Libro) REFERENCES Libro(ID_Libro),    -- Relación con la tabla Libro.
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario)) -- Relación con la tabla Usuario.
+ENGINE = InnoDB;
